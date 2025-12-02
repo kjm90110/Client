@@ -4,19 +4,36 @@ export default class PostService {
         this.http = http;
     }
 
-    async getPosts(userid) {}
-
-    async createPost(text) {
-        return this.http.fetch(`post/`, {
-            method: "POST",
+    async getPosts(userid) {
+        const query = userid ? `?userid=${userid}` : "";
+        return this.http.fetch(`/post${query}`, {
+            method: "GET",
             headers: this.getHeaders(),
-            body: JSON.stringify({ text, userid: "jumi", name: "주미" }),
         });
     }
 
-    async updatePost(postId, text) {}
+    async createPost(text) {
+        return this.http.fetch(`/post`, {
+            method: "POST",
+            headers: this.getHeaders(),
+            body: JSON.stringify({ text }),
+        });
+    }
 
-    async deletePost(postId) {}
+    async updatePost(postId, text) {
+        return this.http.fetch(`/post/${postId}`, {
+            method: "PUT",
+            headers: this.getHeaders(),
+            body: JSON.stringify({ text }),
+        });
+    }
+
+    async deletePost(postId) {
+        return this.http.fetch(`/post/${postId}`, {
+            method: "DELETE",
+            headers: this.getHeaders(),
+        });
+    }
 
     getHeaders() {
         const token = this.tokenStorage.getToken();
